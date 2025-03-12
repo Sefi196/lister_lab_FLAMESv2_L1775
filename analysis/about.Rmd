@@ -1,10 +1,497 @@
 ---
-title: "About"
-output:
+title: "Lister_lab"
+date: "`r Sys.Date()`"
+output:  
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+# Lister Lab analysis FLAMESv2
+
+## Preamble
+
+Sample: L1775\
+FALMESv2 run completed on 11 March 2025\
+Bambu Version: 3.3.5\
+NDR: 0.048\
+\
+[I had to do a lot of troubleshooting to get FLAMES to run. This included:]{.underline}
+
+-   Filtering the genome alignment to remove supplementary alignments.
+
+-   Using HongYang's fix for the Bambu version; otherwise, it throws an error. This fix can be found in the SLURM output files in the `outs` folder.
+
+-   Manually adding BC and UMI tags to the transcriptome alignment file using the old matched `reads.fastq` file.
+
+-   Sorting the file by read name.
+
+## Setup
+
+```{r,  echo = TRUE, cache=TRUE, eval=TRUE}
+library(rtracklayer)
+library(Seurat)
+library(DropletUtils)
+library(gridExtra)
+library(BiocParallel)
+library(SingleCellExperiment)
+library(DoubletFinder)
+library(stringr)
+library(cowplot)
+library(grid)
+library(patchwork)
+library(tidyverse)
+library(Matrix)
+library(data.table)
+
+```
+
+define fucntions for gene dict
+
+```{r,  echo = TRUE, cache=TRUE, eval=FALSE}
+
+# Function to make csv naming resource 
+make_isoform_gene_symbol_dict <- function(FLAMES_gtf, 
+                                          reference_gtf, 
+                                          output_file) {
+  # Import the first GTF file (transcripts GTF)
+  gtf1 <- import(FLAMES_gtf)
+  gtf1_df <- as.data.frame(gtf1)
+  
+  # Select relevant columns from the first GTF
+  selected_columns1 <- gtf1_df[, c("transcript_id", "gene_id")]
+  unique_selected_cols <- unique(selected_columns1)
+  
+  # Import the second GTF file (reference GTF with gene symbols)
+  gtf2 <- import(reference_gtf)
+  gtf2_df <- as.data.frame(gtf2)
+  
+  # Select relevant columns from the second GTF
+  selected_columns2 <- gtf2_df[, c("gene_name", "gene_id")]
+  unique_gene_symbol <- unique(selected_columns2)
+  
+  # Merge the two data frames on 'gene_id'
+  combined_data <- merge(unique_selected_cols, 
+                         unique_gene_symbol, 
+                         by = "gene_id", 
+                         all.x = TRUE)
+  
+  # If 'gene_name' is missing, replace it with 'gene_id'
+  combined_data$gene_symbol <- ifelse(is.na(combined_data$gene_name), 
+                                      combined_data$gene_id, 
+                                      combined_data$gene_name)
+  
+  # Select relevant columns
+  final_combined_data <- combined_data[, c("transcript_id", "gene_id", "gene_symbol")]
+  
+  # Write to a CSV file
+    write.csv(final_combined_data, file = file.path("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/", output_file), row.names = FALSE)
+
+  
+  return(final_combined_data)
+}
+
+#Convert count matrices from Gene ID to gene Symbol
+
+# The FLAMES ref can be found in your selected output folder after running the Flames pipeline. 
+FLAMES_gtf_file <- "/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/outs/isoform_annotated.gtf" #ensure file is unzipped
+reference_gtf_file <- "/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/resources/gencode.v47.annotation.gtf" # ensure file is unzipped
+output_file <- "isoform_gene_dict.csv"
+
+# Call the helper function defined in code block above to create a dictionary containing corresponding gene information for each isoform
+# This may take a few minutes 
+isoform_gene_dict <- make_isoform_gene_symbol_dict(FLAMES_gtf_file,
+                                                   reference_gtf_file,
+                                                   output_file)
+```
+
+## Convert count matrices from Gene ID to gene Symbol
+
+```{r, echo = TRUE, cache=TRUE, eval=FALSE}
+
+convert_ENSGID_to_geneSymbol <- function(gene_count_matrix_path, 
+                                         id_symbol_df = isoform_gene_dict, 
+                                         output_file,
+                                         return_df = TRUE) {
+  
+  # Load the reference dictionary we made earlier - select gene-level cols
+  id_symbol_df <- as_tibble(id_symbol_df) %>%
+    dplyr::select(gene_id, gene_symbol)
+  
+  # Load the data object with ENSGID row names
+  gene_count_matrix <- fread(gene_count_matrix_path, header = TRUE)
+  colnames(gene_count_matrix)[1] <- "gene_id"
+  
+  # Replace ENSGIDs with gene symbols in original flames gene-level count matrix
+  formatted_gene_count_matrix <- gene_count_matrix %>%
+  merge(id_symbol_df, by.x = 'gene_id', by.y = 'gene_id') %>%   # Add gene symbol information
+    distinct(gene_symbol, .keep_all = TRUE) %>%   # Remove duplicates based on gene symbol
+    dplyr::select(-gene_id) %>%   # Remove the ENSGID column
+    column_to_rownames(var = "gene_symbol")   # use the gene symbols we added as rownames
+  
+  # Write out the processed data frame
+  fwrite(formatted_gene_count_matrix, 
+            output_file, 
+            row.names = TRUE)
+  
+  # Return the processed count matrix for further use if needed
+  if(return_df){
+    return(formatted_gene_count_matrix)
+  }
+}
+
+
+# convert Gene_id to gene symbol for gene counts
+gene_counts <- convert_ENSGID_to_geneSymbol(
+  gene_count_matrix_path = "/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/outs/gene_count.csv",
+  output_file = "output/geneSymbol_gene_count.csv"
+)
+```
+
+Execute the above code and save intermediate files.\
+Here i set many code chunck to eval=FALSE, to limit size of workflow docs.
+
+```{r, echo=TRUE}
+
+# standard QC filtering and also remove doublets 
+#define sample name
+sample_id = 'Lister_L1775'
+
+# Read the CSV file
+gene_counts <- fread("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/geneSymbol_gene_count.csv")
+
+# Convert to data frame to support row names
+gene_counts <- as.data.frame(gene_counts)
+
+# Set the first column (V1) as row names and remove it from the data table
+rownames(gene_counts) <- gene_counts$V1
+
+gene_counts$V1 <- NULL
+
+# Create Seurat object
+seurat_object <- CreateSeuratObject(counts = gene_counts, project = sample_id)
+
+# Plot relationship between reads and unique genes per cell
+plot_scatter1 <- FeatureScatter(seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") +
+  geom_smooth(method = "lm") + NoLegend() +
+  labs(title = "Reads vs Unique Genes per Cell BEFORE Filtering")
+
+plot(plot_scatter1)
+```
+
+## Perform very basic QC
+
+Will perform very basic QC. This should probably be done in conjunction with data derived from Chucks paper in Cell. The distributions of cell counts here look more complex.
+
+```{r, echo=TRUE}
+# Add mitochondrial percentage
+seurat_object[["joined"]] <- JoinLayers(seurat_object[["RNA"]])
+seurat_object[["percent.mt"]] <- PercentageFeatureSet(seurat_object, pattern = "^MT-")
+
+p1 <- VlnPlot(seurat_object, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"))
+p1 +  plot_annotation(title = "QC plots (gene level) BEFORE Filtering")
+
+```
+
+```{r, echo=TRUE}
+# Filter cells based on feature and count thresholds
+## define the filtering params - (change these based on your data)
+max.features = 10000
+min.features = 1000
+min.counts = 1000
+max.counts = 100000
+MT = 10
+npc = 15
+doublet_rate = 0.08 ### I have no idea what the doublet rate is here will need to chek with chuck will assume 10,000 cells target
+cluster_res = 0.9
+
+
+#now we filter the seurat object based on the QC params listed above 
+filt_seurat_object <- subset(seurat_object, subset = nFeature_RNA > min.features & nFeature_RNA < max.features & percent.mt < MT & nCount_RNA < max.counts & nCount_RNA > min.counts)
+
+# Plot quality metrics after filtering
+p2 <- VlnPlot(filt_seurat_object, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"))
+p2 + plot_annotation(title = "QC metrics gene level AFTER Filtering")
+
+dim(filt_seurat_object)
+dim(seurat_object)
+```
+
+```{r, echo=TRUE, eval=FALSE}
+# Normalize data
+filt_seurat_object <- NormalizeData(filt_seurat_object, normalization.method = "LogNormalize", scale.factor = 10000)
+  
+# Identify highly variable features
+filt_seurat_object <- FindVariableFeatures(filt_seurat_object, selection.method = "vst", nfeatures = 2000)
+  
+# Apply linear transformation
+all_genes <- rownames(filt_seurat_object)
+filt_seurat_object <- ScaleData(filt_seurat_object, features = all_genes)
+  
+# Perform PCA
+filt_seurat_object <- RunPCA(filt_seurat_object, features = VariableFeatures(object = filt_seurat_object))
+  
+# Cluster cells
+filt_seurat_object <- FindNeighbors(filt_seurat_object, dims = 1:npc)
+filt_seurat_object <- FindClusters(filt_seurat_object, resolution = cluster_res)
+
+# Perform UMAP
+filt_seurat_object <- RunUMAP(filt_seurat_object, dims = 1:npc)
+
+```
+
+# Finding and removing doublets
+
+```{r, echo=TRUE, eval=FALSE, cache=TRUE}
+### Filter out doublets (remember to modify doublet rate if samples have variable target cells)
+## pK Identification (no ground-truth) 
+sweep.res.list_pbmc <- paramSweep(filt_seurat_object, PCs = 1:npc, sct = FALSE)
+
+
+sweep.stats_pbmc <- summarizeSweep(sweep.res.list_pbmc, GT = FALSE)
+bcmvn_pbmc <- find.pK(sweep.stats_pbmc)
+
+#####
+pK <- bcmvn_pbmc %>% filter(BCmetric == max(BCmetric)) %>% dplyr::select(pK) 
+pK <- as.numeric(as.character(pK[[1]]))
+  
+## Homotypic Doublet Proportion Estimate 
+annotations <- filt_seurat_object@meta.data$seurat_clusters
+homotypic.prop <- modelHomotypic(annotations)
+nExp_poi <- round(doublet_rate * nrow(filt_seurat_object@meta.data))
+nExp_poi.adj <- round(nExp_poi * (1 - homotypic.prop))
+  
+  # Run doubletFinder 
+filt_seurat_object <- doubletFinder(filt_seurat_object, PCs = 1:npc, pN = 0.25, pK = pK, nExp = nExp_poi.adj, reuse.pANN = FALSE, sct = FALSE)
+
+colnames(filt_seurat_object@meta.data) <- sub("DF.classifications_.*$", "DF.classifications", colnames(filt_seurat_object@meta.data))
+
+  
+  
+###Save the seurat object with doublets listed 
+filt_seurat_object_doublets <- filt_seurat_object
+filt_seurat_object <- subset(filt_seurat_object, subset = DF.classifications == 'Singlet')
+
+```
+
+## doublet plots
+
+```{r, eval=TRUE, echo=TRUE}
+#load in seurats from previous step
+filt_seurat_object_doublets <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_with_doublets_umap_object.rds")
+
+filt_seurat_object <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_umap_object.rds")
+
+# figures
+  ggplot_list <- list(
+  ElbowPlot(filt_seurat_object) + labs(title = 'SD explained by each PC') + theme(text = element_text(size = 10)),
+  
+  FeatureScatter(filt_seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") +
+    geom_smooth(method = "lm") + NoLegend() + labs(title = "Association between reads and \nunique genes per cell AFTER filtering"),
+  
+  DimPlot(filt_seurat_object, reduction = "umap") + 
+    labs(color = "Cluster \n(from PCA)", title = '') + 
+    theme(text = element_text(size = 10)),
+  
+  FeaturePlot(filt_seurat_object, reduction = "umap", features = 'nCount_RNA') + 
+    labs(color = "UMI count", title = '') + 
+    theme(text = element_text(size = 10)),
+  
+  FeaturePlot(filt_seurat_object, reduction = "umap", features = 'nFeature_RNA') + 
+    labs(color = str_wrap("Feature count (gene)", 15), title = '') + 
+    theme(text = element_text(size = 10)),
+  
+  p2
+)
+  
+
+combined_plots <- plot_grid(plotlist = ggplot_list, ncol = 3)
+  plot(combined_plots)
+  
+  
+  
+plot(DimPlot(filt_seurat_object_doublets, reduction = 'umap', group.by = "DF.classifications"))
+
+# Summary doublets
+statsDoublets <- filt_seurat_object_doublets@meta.data %>%
+  group_by(DF.classifications) %>%
+  summarize(Median_nCount_RNA = median(nCount_RNA), Median_nFeature_RNA = median(nFeature_RNA), Count = n())
+
+
+tbl_sts1 <- tableGrob(statsDoublets)
+  grid.draw(tbl_sts1)
+```
+
+## Summary Stats
+
+```{r, echo=TRUE}
+  stats_sumary <- rbind("Sample ID" = sample_id,
+                        "Cells_before_filter" = dim(seurat_object)[2],
+                        "Cells_after_filter" = dim(filt_seurat_object)[2],
+                        "Median Feature per Cell before filter" = median(seurat_object$nFeature_RNA),
+                        "Median Reads per Gene before filter" = median(seurat_object$nCount_RNA),
+                        "Median Feature per Cell" = median(filt_seurat_object$nFeature_RNA),
+                        "Median Reads per Gene" = median(filt_seurat_object$nCount_RNA),
+                        "Max Features" = max.features,
+                        "Min Features" = min.features,
+                        "Min Counts" = min.counts,
+                        "Max Counts" = max.counts,
+                        "MT Percentage" = MT,
+                        "NPCs" = npc,
+                        "Median Percent MT before Filter" = median(seurat_object@meta.data[["percent.mt"]]),
+                        "Median Percent MT after Filter" = median(filt_seurat_object@meta.data[["percent.mt"]]))
+  
+  tbl_sts2 <- tableGrob(stats_sumary)
+  grid.draw(tbl_sts2)
+
+```
+
+```{r, eval=FALSE}
+  #save files
+  saveRDS(filt_seurat_object, file = paste0("output/", sample_id, "_umap_object.rds"))
+  saveRDS(filt_seurat_object_doublets, file = paste0("output/",sample_id, "_with_doublets_umap_object.rds"))
+  write.table(stats_sumary, file = paste0("output/", sample_id, "_stats.csv")) 
+```
+
+# Add in isoform Counts
+
+```{r, echo=TRUE, cache=TRUE, eval=FALSE}
+#This function reads in Oarfish count files and creates a csv file of count data. The function also appends the gene symbol to the ENSTID
+
+process_oarfish_files_to_counts_matrix <- function(flames_output_folder, sample_name, output_dir) {
+
+  # Read in the resource table (transcript_id, gene_id, gene_symbol)
+  # Define the file paths based on the sample name
+  count_matrix_path <- file.path(flames_output_folder, paste0(sample_name, ".count.mtx"))
+  barcodes_path <- file.path(flames_output_folder, paste0(sample_name, ".barcodes.txt"))
+  features_path <- file.path(flames_output_folder, paste0(sample_name, ".features.txt"))
+  
+  # Read the data
+  counts <- readMM(count_matrix_path)
+  barcodes <- readLines(barcodes_path)
+  features <- read.delim(features_path, header = FALSE)
+  
+  # Transpose the matrix for Seurat compatibility
+  counts <- t(counts)
+  
+  # Set row and column names
+  rownames(counts) <- features$V1
+  colnames(counts) <- barcodes
+  
+  # Convert to a data frame
+  counts_df <- as.data.frame(counts)
+  
+  # Add transcript_id as the first column
+  counts_df$transcript_id <- rownames(counts_df)
+  counts_df <- counts_df[, c(ncol(counts_df), 1:(ncol(counts_df)-1))]
+  
+  # Merge with the resource table to add gene symbols
+  df_genesymbol <- counts_df %>%
+    left_join(isoform_gene_dict, by = "transcript_id")
+  
+  # Remove the gene_id column and reorder the columns
+  df_genesymbol$gene_id <- NULL
+  df_genesymbol <- df_genesymbol[, c(ncol(df_genesymbol), 1:(ncol(df_genesymbol)-1))]
+  
+  # Update row names to include gene symbol instead of transcript_id
+  rownames(df_genesymbol) <- paste0(df_genesymbol$transcript_id, "_", df_genesymbol$gene_symbol)
+  df_genesymbol$transcript_id <- NULL
+  df_genesymbol$gene_symbol <- NULL
+  
+  # Write the output to a CSV file
+  output_path <- file.path(output_dir, paste0("gene_symbol_", sample_name, "_counts.csv"))
+  # Write the df_genesymbol data frame to the CSV file using fwrite
+  fwrite(df_genesymbol, output_path)
+  
+  cat("Processed sample:", sample_name, "\nOutput saved to:", output_path, "\n")
+  
+  return(df_genesymbol)
+}
+
+oarfish_counts <- process_oarfish_files_to_counts_matrix(
+  flames_output_folder = "/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/outs",
+  sample_name = "oarfish",
+  output_dir = "output/"
+    )
+```
+
+\
+make a seurat object with oarfish counts and make assay. Add them back to gene object
+
+```{r, echo=TRUE, eval=FALSE}
+  # Load the data object with ENSGID row names
+# Read the CSV file
+oarfish_counts <- fread("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/gene_symbol_oarfish_counts.csv")
+
+# Convert to data frame to support row names
+oarfish_counts <- as.data.frame(oarfish_counts)
+
+# Set the first column (V1) as row names and remove it from the data table
+rownames(oarfish_counts) <- oarfish_counts$V1
+
+oarfish_counts$V1 <- NULL  
+  
+# Create the Seurat object with iso counts
+iso_seurat_obj <- CreateSeuratObject(counts = oarfish_counts, project = sample_id)
+
+VlnPlot(iso_seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2) + plot_annotation(title = "QC plots (isoform level) BEFORE Filtering")
+
+#### isofrom assay 
+## filter the data so iso and gene cells match
+oarfish_iso_matched_gene <- subset(iso_seurat_obj, cells =filt_seurat_object@graphs[["RNA_nn"]]@Dimnames[[1]])
+
+#Rejoin data sets after integration
+oarfish_iso_matched_gene <- JoinLayers(oarfish_iso_matched_gene)
+counts_table_iso <- oarfish_iso_matched_gene[["RNA"]]$counts
+
+#as.data.frame(counts_table_iso) -> df_iso
+
+# Remove rows where the sum is 0
+#df_iso <- df_iso[rowSums(df_iso) != 0, ] # this kills the env will skip for now
+
+#filt_seurat_object[["iso"]] <- CreateAssay5Object(counts = df_iso)
+filt_seurat_object[["iso"]] <- CreateAssay5Object(counts = counts_table_iso)
+
+# Normalize the new assay data
+filt_seurat_object <- NormalizeData(filt_seurat_object, assay = "iso")
+filt_seurat_object <- FindVariableFeatures(filt_seurat_object, assay = "iso")
+filt_seurat_object <- ScaleData(filt_seurat_object, assay = "iso")
+filt_seurat_object <- RunPCA(filt_seurat_object, assay = "iso", reduction.name = "pca_iso")
+
+#Run UMAP
+filt_seurat_object <- RunUMAP(filt_seurat_object, reduction = "pca_iso", dims = 1:15,
+                             assay = "iso", reduction.name = "umap_iso")
+
+#check to see that we have two assays
+filt_seurat_object
+
+```
+
+save files to output
+
+```{r, echo =TRUE, eval=FALSE}
+saveRDS(filt_seurat_object, file = paste0("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/", sample_id, "_gene_and_isoform_seurat.rds"))
+```
+
+### Summary table for Mike's grant
+
+```{r, echo=TRUE}
+filt_seurat_object <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_gene_and_isoform_seurat.rds")
+
+# visualize the UMAP for Gene and isoform
+DimPlot(filt_seurat_object, label = TRUE, reduction = "umap") + ggtitle("UMAP gene level clustering") |
+DimPlot(filt_seurat_object, label = TRUE, reduction = "umap_iso") + ggtitle("UMAP isoform level clustering")
+
+print("Isofrom features per cell")
+summary(filt_seurat_object$nFeature_iso)
+
+print("Isofrom counts per cell")
+summary(filt_seurat_object$nCount_iso)
+
+print("gene counts per cell")
+summary(filt_seurat_object$nCount_RNA)
+
+print("Number of Cells") 
+dim(filt_seurat_object)[2]
+```
