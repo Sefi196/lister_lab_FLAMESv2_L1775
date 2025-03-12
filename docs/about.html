@@ -605,15 +605,15 @@ output/Lister_L1775_gene_and_isoform_seurat.rds
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSefi196listerlabFLAMESv2L1775treeb60ea046f4c5969ba7fc6a199801e7f7b9f004e7targetblankb60ea04a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSefi196listerlabFLAMESv2L1775tree661ec42f06f84df29ef88bc2c59782b383291df6targetblank661ec42a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/tree/b60ea046f4c5969ba7fc6a199801e7f7b9f004e7" target="_blank">b60ea04</a>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/tree/661ec42f06f84df29ef88bc2c59782b383291df6" target="_blank">661ec42</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomSefi196listerlabFLAMESv2L1775treeb60ea046f4c5969ba7fc6a199801e7f7b9f004e7targetblankb60ea04a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomSefi196listerlabFLAMESv2L1775tree661ec42f06f84df29ef88bc2c59782b383291df6targetblank661ec42a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -623,7 +623,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/tree/b60ea046f4c5969ba7fc6a199801e7f7b9f004e7" target="_blank">b60ea04</a>.
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/tree/661ec42f06f84df29ef88bc2c59782b383291df6" target="_blank">661ec42</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -693,6 +693,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/661ec42f06f84df29ef88bc2c59782b383291df6/analysis/about.Rmd" target="_blank">661ec42</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+<td>
+test_new_QC_params
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Sefi196/lister_lab_FLAMESv2_L1775/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/about.html" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1029,20 +1063,6 @@ output_file &lt;- &quot;isoform_gene_dict.csv&quot;
 isoform_gene_dict &lt;- make_isoform_gene_symbol_dict(FLAMES_gtf_file,
                                                    reference_gtf_file,
                                                    output_file)</code></pre>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
 </div>
 <div id="convert-count-matrices-from-gene-id-to-gene-symbol"
 class="section level2">
@@ -1084,20 +1104,6 @@ gene_counts &lt;- convert_ENSGID_to_geneSymbol(
   gene_count_matrix_path = &quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/outs/gene_count.csv&quot;,
   output_file = &quot;output/geneSymbol_gene_count.csv&quot;
 )</code></pre>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
 <p>Execute the above code and save intermediate files.<br />
 Here i set many code chunck to eval=FALSE, to limit size of workflow
 docs.</p>
@@ -1332,20 +1338,6 @@ colnames(filt_seurat_object@meta.data) &lt;- sub(&quot;DF.classifications_.*$&qu
 ###Save the seurat object with doublets listed 
 filt_seurat_object_doublets &lt;- filt_seurat_object
 filt_seurat_object &lt;- subset(filt_seurat_object, subset = DF.classifications == &#39;Singlet&#39;)</code></pre>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
 <div id="doublet-plots" class="section level2">
 <h2>Doublet plots</h2>
 <pre class="r"><code>#load in seurats from previous step
@@ -1379,7 +1371,7 @@ filt_seurat_object &lt;- readRDS(&quot;/data/gpfs/projects/punim2510/Project_lis
 combined_plots &lt;- plot_grid(plotlist = ggplot_list, ncol = 3)</code></pre>
 <pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <pre class="r"><code>  plot(combined_plots)</code></pre>
-<p><img src="figure/about.Rmd/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/about.Rmd/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
 Past versions of unnamed-chunk-9-1.png
@@ -1404,6 +1396,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-9-1.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-9-1.png" target="_blank">5bd0722</a>
 </td>
 <td>
@@ -1418,7 +1421,7 @@ Sefi Prawer
 </div>
 </div>
 <pre class="r"><code>plot(DimPlot(filt_seurat_object_doublets, reduction = &#39;umap&#39;, group.by = &quot;DF.classifications&quot;))</code></pre>
-<p><img src="figure/about.Rmd/unnamed-chunk-9-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/about.Rmd/unnamed-chunk-9-2.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-2">
 Past versions of unnamed-chunk-9-2.png
@@ -1443,6 +1446,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-9-2.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-9-2.png" target="_blank">5bd0722</a>
 </td>
 <td>
@@ -1465,7 +1479,44 @@ statsDoublets &lt;- filt_seurat_object_doublets@meta.data %&gt;%
 tbl_sts1 &lt;- tableGrob(statsDoublets)
   grid.newpage()
   grid.draw(tbl_sts1)</code></pre>
-<p><img src="figure/about.Rmd/unnamed-chunk-9-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/about.Rmd/unnamed-chunk-9-3.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-3">
+Past versions of unnamed-chunk-9-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-9-3.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="summary-stats" class="section level2">
 <h2>Summary Stats</h2>
@@ -1590,20 +1641,6 @@ oarfish_counts &lt;- process_oarfish_files_to_counts_matrix(
   sample_name = &quot;oarfish&quot;,
   output_dir = &quot;output/&quot;
     )</code></pre>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
 <p><br />
 make a seurat object with oarfish counts and make assay.<br />
 Add them back to gene object</p>
@@ -1727,10 +1764,121 @@ Sefi Prawer
   tbl_sts2 &lt;- tableGrob(stats_sumary)
   grid.draw(tbl_sts2)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-16-1.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>   FeaturePlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;))</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-16-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-2">
+Past versions of unnamed-chunk-16-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-16-2.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>  VlnPlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;), group.by = &quot;orig.ident&quot;)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-16-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-3">
+Past versions of unnamed-chunk-16-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-16-3.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="adjust-filtering-params" class="section level3">
 <h3>Adjust filtering params</h3>
@@ -1777,10 +1925,121 @@ filt_seurat_object &lt;- subset(filt_seurat_object, subset = nFeature_RNA &gt; m
   tbl_sts2 &lt;- tableGrob(stats_sumary)
   grid.draw(tbl_sts2)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
+Past versions of unnamed-chunk-17-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-17-1.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>  FeaturePlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;))</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-17-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-2">
+Past versions of unnamed-chunk-17-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-17-2.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>  VlnPlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;), group.by = &quot;orig.ident&quot;)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-17-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-3">
+Past versions of unnamed-chunk-17-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/8e809492bdf9a498e6107b8cfb30ccf969cf1e0e/docs/figure/about.Rmd/unnamed-chunk-17-3.png" target="_blank">8e80949</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
