@@ -31,7 +31,7 @@ NDR: 0.048\
 
 load required packages
 
-```{r,  echo = TRUE, eval=TRUE}
+```{r, echo = TRUE, eval=TRUE}
 library(data.table)
 library(rtracklayer)
 library(Seurat)
@@ -53,7 +53,7 @@ library(ggplot2)
 
 Define gene dict fucntion
 
-```{r,  echo = TRUE, cache=TRUE, eval=FALSE}
+```{r,  echo = TRUE, eval=FALSE}
 
 # Function to make csv naming resource 
 make_isoform_gene_symbol_dict <- function(FLAMES_gtf, 
@@ -112,7 +112,7 @@ isoform_gene_dict <- make_isoform_gene_symbol_dict(FLAMES_gtf_file,
 
 ## Convert count matrices from Gene ID to gene Symbol
 
-```{r, echo = TRUE, cache=TRUE, eval=FALSE}
+```{r, echo = TRUE, eval=FALSE}
 
 convert_ENSGID_to_geneSymbol <- function(gene_count_matrix_path, 
                                          id_symbol_df = isoform_gene_dict, 
@@ -247,7 +247,7 @@ filt_seurat_object <- RunUMAP(filt_seurat_object, dims = 1:npc)
 
 # Finding and removing doublets
 
-```{r, echo=TRUE, eval=FALSE, cache=TRUE}
+```{r, echo=TRUE, eval=FALSE}
 ### Filter out doublets (remember to modify doublet rate if samples have variable target cells)
 ## pK Identification (no ground-truth) 
 sweep.res.list_pbmc <- paramSweep(filt_seurat_object, PCs = 1:npc, sct = FALSE)
@@ -281,7 +281,7 @@ filt_seurat_object <- subset(filt_seurat_object, subset = DF.classifications == 
 
 ## Doublet plots
 
-```{r, eval=TRUE, echo=TRUE, fig.width=8, fig.height=8}
+```{r, eval=TRUE, echo=TRUE, fig.width=10, fig.height=10}
 #load in seurats from previous step
 filt_seurat_object_doublets <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_with_doublets_umap_object.rds")
 
@@ -312,8 +312,6 @@ filt_seurat_object <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/F
 
 combined_plots <- plot_grid(plotlist = ggplot_list, ncol = 3)
   plot(combined_plots)
-  
-  
   
 plot(DimPlot(filt_seurat_object_doublets, reduction = 'umap', group.by = "DF.classifications"))
 
@@ -361,7 +359,7 @@ tbl_sts1 <- tableGrob(statsDoublets)
 
 # Add in isoform Counts
 
-```{r, echo=TRUE, cache=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=FALSE}
 #This function reads in Oarfish count files and creates a csv file of count data. The function also appends the gene symbol to the ENSTID
 
 process_oarfish_files_to_counts_matrix <- function(flames_output_folder, sample_name, output_dir) {
