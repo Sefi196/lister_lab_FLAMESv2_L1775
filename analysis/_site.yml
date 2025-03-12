@@ -12,7 +12,7 @@ navbar:
   right:
   - icon: fab fa-github
     text: Source code
-    href: https://github.com/sefi prawer/lister_lab_FLAMESv2_L1775
+    href: https://github.com/myname/lister_lab_FLAMESv2_L1775
 output:
   workflowr::wflow_html:
     toc: yes
