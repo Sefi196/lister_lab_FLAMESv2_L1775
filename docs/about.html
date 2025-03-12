@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -340,7 +342,13 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -597,13 +605,15 @@ output/Lister_L1775_gene_and_isoform_seurat.rds
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong3b2b47b">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSefi196listerlabFLAMESv2L1775treeb60ea046f4c5969ba7fc6a199801e7f7b9f004e7targetblankb60ea04a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 3b2b47b
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/tree/b60ea046f4c5969ba7fc6a199801e7f7b9f004e7" target="_blank">b60ea04</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong3b2b47b"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomSefi196listerlabFLAMESv2L1775treeb60ea046f4c5969ba7fc6a199801e7f7b9f004e7targetblankb60ea04a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -612,7 +622,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 3b2b47b.
+The results in this page were generated with repository version
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/tree/b60ea046f4c5969ba7fc6a199801e7f7b9f004e7" target="_blank">b60ea04</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -687,7 +698,42 @@ Message
 Rmd
 </td>
 <td>
-3b2b47b
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/b60ea046f4c5969ba7fc6a199801e7f7b9f004e7/analysis/about.Rmd" target="_blank">b60ea04</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+<td>
+wflow_publish(c("analysis/index.Rmd", "analysis/about.Rmd",
+"analysis/license.Rmd"))
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Sefi196/lister_lab_FLAMESv2_L1775/5bd072271668c38dce6dc5cee3834712d457c851/docs/about.html" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/3b2b47bc85ffd10df616e69439cb6066273b50e5/analysis/about.Rmd" target="_blank">3b2b47b</a>
 </td>
 <td>
 Sefi Prawer
@@ -704,7 +750,7 @@ Lister_lab first commit
 Rmd
 </td>
 <td>
-89531b1
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/89531b10dbd0fc8d3f127cc98bbdbf10ee17fedb/analysis/about.Rmd" target="_blank">89531b1</a>
 </td>
 <td>
 Sefi Prawer
@@ -747,35 +793,189 @@ file using the old matched <code>reads.fastq</code> file.</p></li>
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
-<pre class="r"><code>library(rtracklayer)
-library(Seurat)
-library(DropletUtils)
-library(gridExtra)
-library(BiocParallel)
+<p>load required packages</p>
+<pre class="r"><code>library(data.table)
+library(rtracklayer)</code></pre>
+<pre><code>Loading required package: GenomicRanges</code></pre>
+<pre><code>Loading required package: stats4</code></pre>
+<pre><code>Loading required package: BiocGenerics</code></pre>
+<pre><code>
+Attaching package: &#39;BiocGenerics&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    IQR, mad, sd, var, xtabs</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,
+    table, tapply, union, unique, unsplit, which.max, which.min</code></pre>
+<pre><code>Loading required package: S4Vectors</code></pre>
+<pre><code>
+Attaching package: &#39;S4Vectors&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:data.table&#39;:
+
+    first, second</code></pre>
+<pre><code>The following object is masked from &#39;package:utils&#39;:
+
+    findMatches</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    expand.grid, I, unname</code></pre>
+<pre><code>Loading required package: IRanges</code></pre>
+<pre><code>
+Attaching package: &#39;IRanges&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:data.table&#39;:
+
+    shift</code></pre>
+<pre><code>Loading required package: GenomeInfoDb</code></pre>
+<pre class="r"><code>library(Seurat)</code></pre>
+<pre><code>Loading required package: SeuratObject</code></pre>
+<pre><code>Loading required package: sp</code></pre>
+<pre><code>
+Attaching package: &#39;sp&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:IRanges&#39;:
+
+    %over%</code></pre>
+<pre><code>
+Attaching package: &#39;SeuratObject&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:GenomicRanges&#39;:
+
+    intersect</code></pre>
+<pre><code>The following object is masked from &#39;package:GenomeInfoDb&#39;:
+
+    intersect</code></pre>
+<pre><code>The following object is masked from &#39;package:IRanges&#39;:
+
+    intersect</code></pre>
+<pre><code>The following object is masked from &#39;package:S4Vectors&#39;:
+
+    intersect</code></pre>
+<pre><code>The following object is masked from &#39;package:BiocGenerics&#39;:
+
+    intersect</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    intersect, t</code></pre>
+<pre class="r"><code>library(DropletUtils)</code></pre>
+<pre><code>Loading required package: SingleCellExperiment</code></pre>
+<pre><code>Loading required package: SummarizedExperiment</code></pre>
+<pre><code>Loading required package: MatrixGenerics</code></pre>
+<pre><code>Loading required package: matrixStats</code></pre>
+<pre><code>
+Attaching package: &#39;MatrixGenerics&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:matrixStats&#39;:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars</code></pre>
+<pre><code>Loading required package: Biobase</code></pre>
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    &#39;browseVignettes()&#39;. To cite Bioconductor, see
+    &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
+<pre><code>
+Attaching package: &#39;Biobase&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:MatrixGenerics&#39;:
+
+    rowMedians</code></pre>
+<pre><code>The following objects are masked from &#39;package:matrixStats&#39;:
+
+    anyMissing, rowMedians</code></pre>
+<pre><code>
+Attaching package: &#39;SummarizedExperiment&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:Seurat&#39;:
+
+    Assays</code></pre>
+<pre><code>The following object is masked from &#39;package:SeuratObject&#39;:
+
+    Assays</code></pre>
+<pre class="r"><code>library(gridExtra)</code></pre>
+<pre><code>
+Attaching package: &#39;gridExtra&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:Biobase&#39;:
+
+    combine</code></pre>
+<pre><code>The following object is masked from &#39;package:BiocGenerics&#39;:
+
+    combine</code></pre>
+<pre class="r"><code>library(BiocParallel)
 library(SingleCellExperiment)
 library(DoubletFinder)
 library(stringr)
 library(cowplot)
 library(grid)
-library(patchwork)
-library(tidyverse)
-library(Matrix)
-library(data.table)</code></pre>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
-<p>define fucntions for gene dict</p>
+library(patchwork)</code></pre>
+<pre><code>
+Attaching package: &#39;patchwork&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:cowplot&#39;:
+
+    align_plots</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ purrr     1.0.2
+✔ forcats   1.0.0     ✔ readr     2.1.5
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1</code></pre>
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ lubridate::%within%() masks IRanges::%within%()
+✖ dplyr::between()      masks data.table::between()
+✖ dplyr::collapse()     masks IRanges::collapse()
+✖ dplyr::combine()      masks gridExtra::combine(), Biobase::combine(), BiocGenerics::combine()
+✖ dplyr::count()        masks matrixStats::count()
+✖ dplyr::desc()         masks IRanges::desc()
+✖ tidyr::expand()       masks S4Vectors::expand()
+✖ dplyr::filter()       masks stats::filter()
+✖ dplyr::first()        masks S4Vectors::first(), data.table::first()
+✖ lubridate::hour()     masks data.table::hour()
+✖ lubridate::isoweek()  masks data.table::isoweek()
+✖ dplyr::lag()          masks stats::lag()
+✖ dplyr::last()         masks data.table::last()
+✖ lubridate::mday()     masks data.table::mday()
+✖ lubridate::minute()   masks data.table::minute()
+✖ lubridate::month()    masks data.table::month()
+✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()
+✖ lubridate::quarter()  masks data.table::quarter()
+✖ purrr::reduce()       masks GenomicRanges::reduce(), IRanges::reduce()
+✖ dplyr::rename()       masks S4Vectors::rename()
+✖ lubridate::second()   masks S4Vectors::second(), data.table::second()
+✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()
+✖ dplyr::slice()        masks IRanges::slice()
+✖ lubridate::stamp()    masks cowplot::stamp()
+✖ purrr::transpose()    masks data.table::transpose()
+✖ lubridate::wday()     masks data.table::wday()
+✖ lubridate::week()     masks data.table::week()
+✖ lubridate::yday()     masks data.table::yday()
+✖ lubridate::year()     masks data.table::year()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(Matrix)</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;
+
+The following objects are masked from &#39;package:tidyr&#39;:
+
+    expand, pack, unpack
+
+The following object is masked from &#39;package:S4Vectors&#39;:
+
+    expand</code></pre>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<p>Define gene dict fucntion</p>
 <pre class="r"><code># Function to make csv naming resource 
 make_isoform_gene_symbol_dict &lt;- function(FLAMES_gtf, 
                                           reference_gtf, 
@@ -906,7 +1106,7 @@ docs.</p>
 sample_id = &#39;Lister_L1775&#39;
 
 # Read the CSV file
-gene_counts &lt;- fread(&quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/geneSymbol_gene_count.csv&quot;)
+gene_counts &lt;- data.table::fread(&quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/geneSymbol_gene_count.csv&quot;)
 
 # Convert to data frame to support row names
 gene_counts &lt;- as.data.frame(gene_counts)
@@ -917,18 +1117,55 @@ rownames(gene_counts) &lt;- gene_counts$V1
 gene_counts$V1 &lt;- NULL
 
 # Create Seurat object
-seurat_object &lt;- CreateSeuratObject(counts = gene_counts, project = sample_id)</code></pre>
+seurat_object &lt;- Seurat::CreateSeuratObject(counts = gene_counts, project = sample_id)</code></pre>
 <pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
 (&#39;-&#39;)</code></pre>
 <pre><code>Warning: Data is of class data.frame. Coercing to dgCMatrix.</code></pre>
 <pre class="r"><code># Plot relationship between reads and unique genes per cell
-plot_scatter1 &lt;- FeatureScatter(seurat_object, feature1 = &quot;nCount_RNA&quot;, feature2 = &quot;nFeature_RNA&quot;) +
-  geom_smooth(method = &quot;lm&quot;) + NoLegend() +
+plot_scatter1 &lt;- Seurat::FeatureScatter(seurat_object, feature1 = &quot;nCount_RNA&quot;, feature2 = &quot;nFeature_RNA&quot;) +
+  ggplot2::geom_smooth(method = &quot;lm&quot;) + NoLegend() +
   labs(title = &quot;Reads vs Unique Genes per Cell BEFORE Filtering&quot;)
 
 plot(plot_scatter1)</code></pre>
 <pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-4-1.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="perform-very-basic-qc" class="section level2">
 <h2>Perform very basic QC</h2>
@@ -945,6 +1182,43 @@ p1 &lt;- VlnPlot(seurat_object, features = c(&quot;nFeature_RNA&quot;, &quot;nCo
 utilizing &quot;counts&quot; layer instead.</code></pre>
 <pre class="r"><code>p1 +  plot_annotation(title = &quot;QC plots (gene level) BEFORE Filtering&quot;)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-5-1.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Filter cells based on feature and count thresholds
 ## define the filtering params - (change these based on your data)
 max.features = 10000
@@ -966,6 +1240,43 @@ p2 &lt;- VlnPlot(filt_seurat_object, features = c(&quot;nFeature_RNA&quot;, &quo
 utilizing &quot;counts&quot; layer instead.</code></pre>
 <pre class="r"><code>p2 + plot_annotation(title = &quot;QC metrics gene level AFTER Filtering&quot;)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-6-1.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dim(filt_seurat_object)</code></pre>
 <pre><code>[1] 39906 10660</code></pre>
 <pre class="r"><code>dim(seurat_object)</code></pre>
@@ -1036,7 +1347,7 @@ remove this warning. See the
 </p>
 </div>
 <div id="doublet-plots" class="section level2">
-<h2>doublet plots</h2>
+<h2>Doublet plots</h2>
 <pre class="r"><code>#load in seurats from previous step
 filt_seurat_object_doublets &lt;- readRDS(&quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_with_doublets_umap_object.rds&quot;)
 
@@ -1068,18 +1379,93 @@ filt_seurat_object &lt;- readRDS(&quot;/data/gpfs/projects/punim2510/Project_lis
 combined_plots &lt;- plot_grid(plotlist = ggplot_list, ncol = 3)</code></pre>
 <pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <pre class="r"><code>  plot(combined_plots)</code></pre>
-<p><img src="figure/about.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plot(DimPlot(filt_seurat_object_doublets, reduction = &#39;umap&#39;, group.by = &quot;DF.classifications&quot;))
-
-# Summary doublets
+<p><img src="figure/about.Rmd/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-9-1.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>plot(DimPlot(filt_seurat_object_doublets, reduction = &#39;umap&#39;, group.by = &quot;DF.classifications&quot;))</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-9-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-2">
+Past versions of unnamed-chunk-9-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-9-2.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Summary doublets
 statsDoublets &lt;- filt_seurat_object_doublets@meta.data %&gt;%
   group_by(DF.classifications) %&gt;%
   summarize(Median_nCount_RNA = median(nCount_RNA), Median_nFeature_RNA = median(nFeature_RNA), Count = n())
 
 
 tbl_sts1 &lt;- tableGrob(statsDoublets)
+  grid.newpage()
   grid.draw(tbl_sts1)</code></pre>
-<p><img src="figure/about.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/about.Rmd/unnamed-chunk-9-3.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="summary-stats" class="section level2">
 <h2>Summary Stats</h2>
@@ -1102,6 +1488,43 @@ tbl_sts1 &lt;- tableGrob(statsDoublets)
   tbl_sts2 &lt;- tableGrob(stats_sumary)
   grid.draw(tbl_sts2)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-10-1.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>  #save files
   saveRDS(filt_seurat_object, file = paste0(&quot;output/&quot;, sample_id, &quot;_umap_object.rds&quot;))
   saveRDS(filt_seurat_object_doublets, file = paste0(&quot;output/&quot;,sample_id, &quot;_with_doublets_umap_object.rds&quot;))
@@ -1182,8 +1605,8 @@ remove this warning. See the
 </p>
 </div>
 <p><br />
-make a seurat object with oarfish counts and make assay. Add them back
-to gene object</p>
+make a seurat object with oarfish counts and make assay.<br />
+Add them back to gene object</p>
 <pre class="r"><code>  # Load the data object with ENSGID row names
 # Read the CSV file
 oarfish_counts &lt;- fread(&quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/gene_symbol_oarfish_counts.csv&quot;)
@@ -1203,7 +1626,7 @@ VlnPlot(iso_seurat_obj, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&
 
 #### isofrom assay 
 ## filter the data so iso and gene cells match
-oarfish_iso_matched_gene &lt;- subset(iso_seurat_obj, cells =filt_seurat_object@graphs[[&quot;RNA_nn&quot;]]@Dimnames[[1]])
+oarfish_iso_matched_gene &lt;- subset(iso_seurat_obj, cells=filt_seurat_object@graphs[[&quot;RNA_nn&quot;]]@Dimnames[[1]])
 
 #Rejoin data sets after integration
 oarfish_iso_matched_gene &lt;- JoinLayers(oarfish_iso_matched_gene)
@@ -1229,8 +1652,13 @@ filt_seurat_object &lt;- RunUMAP(filt_seurat_object, reduction = &quot;pca_iso&q
 
 #check to see that we have two assays
 filt_seurat_object</code></pre>
-<p>save files to output</p>
+<div id="save-files-to-output" class="section level3">
+<h3>save files to output</h3>
 <pre class="r"><code>saveRDS(filt_seurat_object, file = paste0(&quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/&quot;, sample_id, &quot;_gene_and_isoform_seurat.rds&quot;))</code></pre>
+</div>
+</div>
+<div id="summary-stats-1" class="section level1">
+<h1>Summary Stats</h1>
 <div id="summary-table-for-mikes-grant" class="section level3">
 <h3>Summary table for Mike’s grant</h3>
 <pre class="r"><code>filt_seurat_object &lt;- readRDS(&quot;/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_gene_and_isoform_seurat.rds&quot;)
@@ -1239,25 +1667,120 @@ filt_seurat_object</code></pre>
 DimPlot(filt_seurat_object, label = TRUE, reduction = &quot;umap&quot;) + ggtitle(&quot;UMAP gene level clustering&quot;) |
 DimPlot(filt_seurat_object, label = TRUE, reduction = &quot;umap_iso&quot;) + ggtitle(&quot;UMAP isoform level clustering&quot;)</code></pre>
 <p><img src="figure/about.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>print(&quot;Isofrom features per cell&quot;)</code></pre>
-<pre><code>[1] &quot;Isofrom features per cell&quot;</code></pre>
-<pre class="r"><code>summary(filt_seurat_object$nFeature_iso)</code></pre>
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    732    2132    3002    3643    5004   11383 </code></pre>
-<pre class="r"><code>print(&quot;Isofrom counts per cell&quot;)</code></pre>
-<pre><code>[1] &quot;Isofrom counts per cell&quot;</code></pre>
-<pre class="r"><code>summary(filt_seurat_object$nCount_iso)</code></pre>
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    569    1736    2548    3444    4777   15962 </code></pre>
-<pre class="r"><code>print(&quot;gene counts per cell&quot;)</code></pre>
-<pre><code>[1] &quot;gene counts per cell&quot;</code></pre>
-<pre class="r"><code>summary(filt_seurat_object$nCount_RNA)</code></pre>
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1307    3941    5960    8573   12466   38763 </code></pre>
-<pre class="r"><code>print(&quot;Number of Cells&quot;) </code></pre>
-<pre><code>[1] &quot;Number of Cells&quot;</code></pre>
-<pre class="r"><code>dim(filt_seurat_object)[2]</code></pre>
-<pre><code>[1] 10268</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Sefi196/lister_lab_FLAMESv2_L1775/blob/5bd072271668c38dce6dc5cee3834712d457c851/docs/figure/about.Rmd/unnamed-chunk-15-1.png" target="_blank">5bd0722</a>
+</td>
+<td>
+Sefi Prawer
+</td>
+<td>
+2025-03-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="summary-table-for-mikes-grant-1" class="section level3">
+<h3>Summary table for Mike’s grant</h3>
+<pre class="r"><code>  stats_sumary &lt;- rbind(&quot;Sample ID&quot; = sample_id,
+          &quot;Cells_before_filter&quot; = dim(seurat_object)[2],
+          &quot;Cells_after_filter&quot; = dim(filt_seurat_object)[2],
+          &quot;Median genes per Cell before filter&quot; = median(seurat_object$nFeature_RNA),
+          &quot;Median gene counts per cell before filter&quot; = median(seurat_object$nCount_RNA),
+          &quot;Median genes per cell&quot; = median(filt_seurat_object$nFeature_RNA),
+          &quot;Median isoforms per cell&quot; = median(filt_seurat_object$nFeature_iso),
+          &quot;Median isoform counts per cell&quot; = round(median(filt_seurat_object$nCount_iso), 2),
+          &quot;Max Features&quot; = max.features,
+          &quot;Min Features&quot; = min.features,
+          &quot;Min Counts&quot; = min.counts,
+          &quot;Max Counts&quot; = max.counts,
+          &quot;MT Percentage&quot; = MT,
+          &quot;NPCs&quot; = npc,
+          &quot;Median Percent MT before Filter&quot; = round(median(seurat_object@meta.data[[&quot;percent.mt&quot;]]), 2),
+          &quot;Median Percent MT after Filter&quot; = round(median(filt_seurat_object@meta.data[[&quot;percent.mt&quot;]]), 2))
+  
+  tbl_sts2 &lt;- tableGrob(stats_sumary)
+  grid.draw(tbl_sts2)</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>   FeaturePlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;))</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-16-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  VlnPlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;), group.by = &quot;orig.ident&quot;)</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-16-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="adjust-filtering-params" class="section level3">
+<h3>Adjust filtering params</h3>
+<p>Mike wants to see the effect of modifying the filtering params to see
+the effect on the summary stats.<br />
+Here is a quick adjustment of the parms but ideally this should be run
+through a program that more precisely chooses a threshold. (see Fernando
+code for this addition - think it works on sce objects)<br />
+<br />
+Note: filtering a filtered object here so just be careful that you use
+the right object for downstream analysis</p>
+<pre class="r"><code># Filter cells based on feature and count thresholds
+## define the filtering params - (change these based on your data)
+max.features = 8000
+min.features = 2000
+min.counts = 2000
+max.counts = 30000
+MT = 10
+npc = 15
+doublet_rate = 0.08 ### I have no idea what the doublet rate is here will need to chek with chuck will assume 10,000 cells target
+cluster_res = 0.9
+
+
+#now we filter the seurat object based on the QC params listed above 
+filt_seurat_object &lt;- subset(filt_seurat_object, subset = nFeature_RNA &gt; min.features &amp; nFeature_RNA &lt; max.features &amp; percent.mt &lt; MT &amp; nCount_RNA &lt; max.counts &amp; nCount_RNA &gt; min.counts)
+
+  stats_sumary &lt;- rbind(&quot;Sample ID&quot; = sample_id,
+          &quot;Cells_before_filter&quot; = dim(seurat_object)[2],
+          &quot;Cells_after_filter&quot; = dim(filt_seurat_object)[2],
+          &quot;Median genes per Cell before filter&quot; = median(seurat_object$nFeature_RNA),
+          &quot;Median gene counts per cell before filter&quot; = median(seurat_object$nCount_RNA),
+          &quot;Median genes per cell&quot; = median(filt_seurat_object$nFeature_RNA),
+          &quot;Median isoforms per cell&quot; = median(filt_seurat_object$nFeature_iso),
+          &quot;Median isoform counts per cell&quot; = round(median(filt_seurat_object$nCount_iso), 2),
+          &quot;Max Features&quot; = max.features,
+          &quot;Min Features&quot; = min.features,
+          &quot;Min Counts&quot; = min.counts,
+          &quot;Max Counts&quot; = max.counts,
+          &quot;MT Percentage&quot; = MT,
+          &quot;NPCs&quot; = npc,
+          &quot;Median Percent MT before Filter&quot; = round(median(seurat_object@meta.data[[&quot;percent.mt&quot;]]), 2),
+          &quot;Median Percent MT after Filter&quot; = round(median(filt_seurat_object@meta.data[[&quot;percent.mt&quot;]]), 2))
+  
+  tbl_sts2 &lt;- tableGrob(stats_sumary)
+  grid.draw(tbl_sts2)</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  FeaturePlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;))</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-17-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  VlnPlot(filt_seurat_object, features = c(&quot;nCount_RNA&quot;, &quot;nFeature_RNA&quot;, &quot;percent.mt&quot;), group.by = &quot;orig.ident&quot;)</code></pre>
+<p><img src="figure/about.Rmd/unnamed-chunk-17-3.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1297,96 +1820,96 @@ other attached packages:
  [9] ggplot2_3.5.1               tidyverse_2.0.0            
 [11] patchwork_1.3.0             cowplot_1.1.3              
 [13] stringr_1.5.1               DoubletFinder_2.0.4        
-[15] BiocParallel_1.40.0         data.table_1.16.2          
-[17] gridExtra_2.3               DropletUtils_1.26.0        
-[19] SingleCellExperiment_1.28.0 SummarizedExperiment_1.36.0
-[21] Biobase_2.66.0              MatrixGenerics_1.18.0      
-[23] matrixStats_1.4.1           Seurat_5.1.0               
-[25] SeuratObject_5.0.2          sp_2.1-4                   
-[27] rtracklayer_1.64.0          GenomicRanges_1.58.0       
-[29] GenomeInfoDb_1.42.0         IRanges_2.40.0             
-[31] S4Vectors_0.44.0            BiocGenerics_0.52.0        
+[15] BiocParallel_1.40.0         gridExtra_2.3              
+[17] DropletUtils_1.26.0         SingleCellExperiment_1.28.0
+[19] SummarizedExperiment_1.36.0 Biobase_2.66.0             
+[21] MatrixGenerics_1.18.0       matrixStats_1.4.1          
+[23] Seurat_5.1.0                SeuratObject_5.0.2         
+[25] sp_2.1-4                    rtracklayer_1.64.0         
+[27] GenomicRanges_1.58.0        GenomeInfoDb_1.42.0        
+[29] IRanges_2.40.0              S4Vectors_0.44.0           
+[31] BiocGenerics_0.52.0         data.table_1.16.2          
 [33] workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
-  [1] RcppAnnoy_0.0.22          splines_4.4.0            
-  [3] later_1.3.2               BiocIO_1.16.0            
-  [5] bitops_1.0-9              R.oo_1.27.0              
-  [7] polyclip_1.10-7           XML_3.99-0.17            
-  [9] fastDummies_1.7.4         lifecycle_1.0.4          
- [11] edgeR_4.4.0               rprojroot_2.0.4          
- [13] globals_0.16.3            processx_3.8.2           
- [15] lattice_0.22-6            MASS_7.3-61              
- [17] magrittr_2.0.3            limma_3.62.1             
- [19] plotly_4.10.4             sass_0.4.9               
- [21] rmarkdown_2.29            jquerylib_0.1.4          
- [23] yaml_2.3.10               httpuv_1.6.15            
- [25] sctransform_0.4.1         spam_2.10-0              
- [27] spatstat.sparse_3.1-0     reticulate_1.39.0        
- [29] pbapply_1.7-2             RColorBrewer_1.1-3       
- [31] abind_1.4-8               zlibbioc_1.52.0          
- [33] Rtsne_0.17                R.utils_2.12.3           
- [35] RCurl_1.98-1.16           git2r_0.35.0             
- [37] GenomeInfoDbData_1.2.13   ggrepel_0.9.6            
- [39] irlba_2.3.5.1             listenv_0.9.1            
- [41] spatstat.utils_3.1-1      goftest_1.2-3            
- [43] RSpectra_0.16-2           dqrng_0.4.1              
- [45] spatstat.random_3.3-1     fitdistrplus_1.2-1       
- [47] parallelly_1.38.0         DelayedMatrixStats_1.28.0
- [49] leiden_0.4.3.1            codetools_0.2-20         
- [51] DelayedArray_0.32.0       scuttle_1.16.0           
- [53] tidyselect_1.2.1          UCSC.utils_1.2.0         
- [55] farver_2.1.2              spatstat.explore_3.3-1   
- [57] GenomicAlignments_1.40.0  jsonlite_1.8.9           
- [59] progressr_0.15.0          ggridges_0.5.6           
- [61] survival_3.7-0            tools_4.4.0              
- [63] ica_1.0-3                 Rcpp_1.0.13-1            
- [65] glue_1.8.0                SparseArray_1.6.0        
- [67] mgcv_1.9-1                xfun_0.49                
- [69] HDF5Array_1.34.0          withr_3.0.2              
- [71] fastmap_1.2.0             rhdf5filters_1.18.0      
- [73] fansi_1.0.6               callr_3.7.3              
- [75] digest_0.6.37             timechange_0.3.0         
- [77] R6_2.5.1                  mime_0.12                
- [79] colorspace_2.1-1          scattermore_1.2          
- [81] tensor_1.5                spatstat.data_3.1-2      
- [83] R.methodsS3_1.8.2         utf8_1.2.4               
- [85] generics_0.1.3            httr_1.4.7               
- [87] htmlwidgets_1.6.4         S4Arrays_1.6.0           
- [89] whisker_0.4.1             uwot_0.2.2               
- [91] pkgconfig_2.0.3           gtable_0.3.6             
- [93] lmtest_0.9-40             XVector_0.46.0           
- [95] htmltools_0.5.8.1         dotCall64_1.2            
- [97] scales_1.3.0              png_0.1-8                
- [99] spatstat.univar_3.0-0     knitr_1.48               
-[101] rstudioapi_0.15.0         tzdb_0.4.0               
-[103] reshape2_1.4.4            rjson_0.2.23             
-[105] nlme_3.1-166              curl_6.0.0               
-[107] rhdf5_2.50.0              cachem_1.1.0             
-[109] zoo_1.8-12                KernSmooth_2.23-24       
-[111] vipor_0.4.7               parallel_4.4.0           
-[113] miniUI_0.1.1.1            ggrastr_1.0.2            
-[115] restfulr_0.0.15           pillar_1.9.0             
-[117] vctrs_0.6.5               RANN_2.6.2               
-[119] promises_1.3.0            beachmat_2.22.0          
-[121] xtable_1.8-4              cluster_2.1.6            
-[123] beeswarm_0.4.0            evaluate_1.0.1           
-[125] locfit_1.5-9.10           cli_3.6.3                
-[127] compiler_4.4.0            Rsamtools_2.20.0         
-[129] rlang_1.1.4               crayon_1.5.3             
-[131] future.apply_1.11.3       labeling_0.4.3           
-[133] ps_1.7.5                  ggbeeswarm_0.7.2         
-[135] getPass_0.2-4             plyr_1.8.9               
-[137] fs_1.6.5                  stringi_1.8.4            
-[139] viridisLite_0.4.2         deldir_2.0-4             
-[141] munsell_0.5.1             Biostrings_2.72.1        
-[143] lazyeval_0.2.2            spatstat.geom_3.3-2      
-[145] RcppHNSW_0.6.0            hms_1.1.3                
-[147] sparseMatrixStats_1.18.0  future_1.34.0            
-[149] Rhdf5lib_1.28.0           statmod_1.5.0            
-[151] shiny_1.9.1               highr_0.11               
-[153] ROCR_1.0-11               igraph_2.1.1             
-[155] bslib_0.8.0              </code></pre>
+  [1] fs_1.6.5                  spatstat.sparse_3.1-0    
+  [3] bitops_1.0-9              httr_1.4.7               
+  [5] RColorBrewer_1.1-3        tools_4.4.0              
+  [7] sctransform_0.4.1         utf8_1.2.4               
+  [9] R6_2.5.1                  HDF5Array_1.34.0         
+ [11] lazyeval_0.2.2            uwot_0.2.2               
+ [13] mgcv_1.9-1                rhdf5filters_1.18.0      
+ [15] withr_3.0.2               progressr_0.15.0         
+ [17] cli_3.6.3                 spatstat.explore_3.3-1   
+ [19] fastDummies_1.7.4         labeling_0.4.3           
+ [21] sass_0.4.9                spatstat.data_3.1-2      
+ [23] ggridges_0.5.6            pbapply_1.7-2            
+ [25] Rsamtools_2.20.0          R.utils_2.12.3           
+ [27] parallelly_1.38.0         limma_3.62.1             
+ [29] rstudioapi_0.15.0         generics_0.1.3           
+ [31] BiocIO_1.16.0             ica_1.0-3                
+ [33] spatstat.random_3.3-1     ggbeeswarm_0.7.2         
+ [35] fansi_1.0.6               abind_1.4-8              
+ [37] R.methodsS3_1.8.2         lifecycle_1.0.4          
+ [39] whisker_0.4.1             yaml_2.3.10              
+ [41] edgeR_4.4.0               rhdf5_2.50.0             
+ [43] SparseArray_1.6.0         Rtsne_0.17               
+ [45] promises_1.3.0            dqrng_0.4.1              
+ [47] crayon_1.5.3              miniUI_0.1.1.1           
+ [49] lattice_0.22-6            beachmat_2.22.0          
+ [51] pillar_1.9.0              knitr_1.48               
+ [53] rjson_0.2.23              future.apply_1.11.3      
+ [55] codetools_0.2-20          leiden_0.4.3.1           
+ [57] glue_1.8.0                getPass_0.2-4            
+ [59] spatstat.univar_3.0-0     vctrs_0.6.5              
+ [61] png_0.1-8                 spam_2.10-0              
+ [63] gtable_0.3.6              cachem_1.1.0             
+ [65] xfun_0.49                 S4Arrays_1.6.0           
+ [67] mime_0.12                 survival_3.7-0           
+ [69] statmod_1.5.0             fitdistrplus_1.2-1       
+ [71] ROCR_1.0-11               nlme_3.1-166             
+ [73] RcppAnnoy_0.0.22          rprojroot_2.0.4          
+ [75] bslib_0.8.0               irlba_2.3.5.1            
+ [77] vipor_0.4.7               KernSmooth_2.23-24       
+ [79] colorspace_2.1-1          ggrastr_1.0.2            
+ [81] tidyselect_1.2.1          processx_3.8.2           
+ [83] compiler_4.4.0            curl_6.0.0               
+ [85] git2r_0.35.0              DelayedArray_0.32.0      
+ [87] plotly_4.10.4             scales_1.3.0             
+ [89] lmtest_0.9-40             callr_3.7.3              
+ [91] digest_0.6.37             goftest_1.2-3            
+ [93] spatstat.utils_3.1-1      rmarkdown_2.29           
+ [95] XVector_0.46.0            htmltools_0.5.8.1        
+ [97] pkgconfig_2.0.3           sparseMatrixStats_1.18.0 
+ [99] highr_0.11                fastmap_1.2.0            
+[101] rlang_1.1.4               htmlwidgets_1.6.4        
+[103] UCSC.utils_1.2.0          shiny_1.9.1              
+[105] DelayedMatrixStats_1.28.0 farver_2.1.2             
+[107] jquerylib_0.1.4           zoo_1.8-12               
+[109] jsonlite_1.8.9            R.oo_1.27.0              
+[111] RCurl_1.98-1.16           magrittr_2.0.3           
+[113] scuttle_1.16.0            GenomeInfoDbData_1.2.13  
+[115] dotCall64_1.2             Rhdf5lib_1.28.0          
+[117] munsell_0.5.1             Rcpp_1.0.13-1            
+[119] reticulate_1.39.0         stringi_1.8.4            
+[121] zlibbioc_1.52.0           MASS_7.3-61              
+[123] plyr_1.8.9                parallel_4.4.0           
+[125] listenv_0.9.1             ggrepel_0.9.6            
+[127] deldir_2.0-4              Biostrings_2.72.1        
+[129] splines_4.4.0             tensor_1.5               
+[131] hms_1.1.3                 locfit_1.5-9.10          
+[133] ps_1.7.5                  igraph_2.1.1             
+[135] spatstat.geom_3.3-2       RcppHNSW_0.6.0           
+[137] reshape2_1.4.4            XML_3.99-0.17            
+[139] evaluate_1.0.1            tzdb_0.4.0               
+[141] httpuv_1.6.15             RANN_2.6.2               
+[143] polyclip_1.10-7           future_1.34.0            
+[145] scattermore_1.2           xtable_1.8-4             
+[147] restfulr_0.0.15           RSpectra_0.16-2          
+[149] later_1.3.2               viridisLite_0.4.2        
+[151] beeswarm_0.4.0            GenomicAlignments_1.40.0 
+[153] cluster_2.1.6             timechange_0.3.0         
+[155] globals_0.16.3           </code></pre>
 </div>
 </div>
 </div>
