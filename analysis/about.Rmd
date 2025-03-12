@@ -29,7 +29,10 @@ NDR: 0.048\
 
 ## Setup
 
-```{r,  echo = TRUE, cache=TRUE, eval=TRUE}
+load required packages
+
+```{r,  echo = TRUE, eval=TRUE}
+library(data.table)
 library(rtracklayer)
 library(Seurat)
 library(DropletUtils)
@@ -43,11 +46,12 @@ library(grid)
 library(patchwork)
 library(tidyverse)
 library(Matrix)
-library(data.table)
+library(ggplot2)
+
 
 ```
 
-define fucntions for gene dict
+Define gene dict fucntion
 
 ```{r,  echo = TRUE, cache=TRUE, eval=FALSE}
 
@@ -159,7 +163,7 @@ Here i set many code chunck to eval=FALSE, to limit size of workflow docs.
 sample_id = 'Lister_L1775'
 
 # Read the CSV file
-gene_counts <- fread("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/geneSymbol_gene_count.csv")
+gene_counts <- data.table::fread("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/geneSymbol_gene_count.csv")
 
 # Convert to data frame to support row names
 gene_counts <- as.data.frame(gene_counts)
@@ -170,11 +174,11 @@ rownames(gene_counts) <- gene_counts$V1
 gene_counts$V1 <- NULL
 
 # Create Seurat object
-seurat_object <- CreateSeuratObject(counts = gene_counts, project = sample_id)
+seurat_object <- Seurat::CreateSeuratObject(counts = gene_counts, project = sample_id)
 
 # Plot relationship between reads and unique genes per cell
-plot_scatter1 <- FeatureScatter(seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") +
-  geom_smooth(method = "lm") + NoLegend() +
+plot_scatter1 <- Seurat::FeatureScatter(seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") +
+  ggplot2::geom_smooth(method = "lm") + NoLegend() +
   labs(title = "Reads vs Unique Genes per Cell BEFORE Filtering")
 
 plot(plot_scatter1)
@@ -275,9 +279,9 @@ filt_seurat_object <- subset(filt_seurat_object, subset = DF.classifications == 
 
 ```
 
-## doublet plots
+## Doublet plots
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE, fig.width=8, fig.height=8}
 #load in seurats from previous step
 filt_seurat_object_doublets <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/Lister_L1775_with_doublets_umap_object.rds")
 
@@ -320,6 +324,7 @@ statsDoublets <- filt_seurat_object_doublets@meta.data %>%
 
 
 tbl_sts1 <- tableGrob(statsDoublets)
+  grid.newpage()
   grid.draw(tbl_sts1)
 ```
 
@@ -417,7 +422,8 @@ oarfish_counts <- process_oarfish_files_to_counts_matrix(
 ```
 
 \
-make a seurat object with oarfish counts and make assay. Add them back to gene object
+make a seurat object with oarfish counts and make assay.\
+Add them back to gene object
 
 ```{r, echo=TRUE, eval=FALSE}
   # Load the data object with ENSGID row names
@@ -439,7 +445,7 @@ VlnPlot(iso_seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2) + 
 
 #### isofrom assay 
 ## filter the data so iso and gene cells match
-oarfish_iso_matched_gene <- subset(iso_seurat_obj, cells =filt_seurat_object@graphs[["RNA_nn"]]@Dimnames[[1]])
+oarfish_iso_matched_gene <- subset(iso_seurat_obj, cells=filt_seurat_object@graphs[["RNA_nn"]]@Dimnames[[1]])
 
 #Rejoin data sets after integration
 oarfish_iso_matched_gene <- JoinLayers(oarfish_iso_matched_gene)
@@ -468,11 +474,13 @@ filt_seurat_object
 
 ```
 
-save files to output
+### save files to output
 
 ```{r, echo =TRUE, eval=FALSE}
 saveRDS(filt_seurat_object, file = paste0("/data/gpfs/projects/punim2510/Project_listerlab/FLAMESv2/analysis/Lister_lab_FLAMESv2_L1775/lister_lab_FLAMESv2_L1775/output/", sample_id, "_gene_and_isoform_seurat.rds"))
 ```
+
+# Summary Stats
 
 ### Summary table for Mike's grant
 
@@ -482,16 +490,79 @@ filt_seurat_object <- readRDS("/data/gpfs/projects/punim2510/Project_listerlab/F
 # visualize the UMAP for Gene and isoform
 DimPlot(filt_seurat_object, label = TRUE, reduction = "umap") + ggtitle("UMAP gene level clustering") |
 DimPlot(filt_seurat_object, label = TRUE, reduction = "umap_iso") + ggtitle("UMAP isoform level clustering")
+```
 
-print("Isofrom features per cell")
-summary(filt_seurat_object$nFeature_iso)
+### Summary table for Mike's grant
 
-print("Isofrom counts per cell")
-summary(filt_seurat_object$nCount_iso)
+```{r, echo=TRUE}
+  stats_sumary <- rbind("Sample ID" = sample_id,
+          "Cells_before_filter" = dim(seurat_object)[2],
+          "Cells_after_filter" = dim(filt_seurat_object)[2],
+          "Median genes per Cell before filter" = median(seurat_object$nFeature_RNA),
+          "Median gene counts per cell before filter" = median(seurat_object$nCount_RNA),
+          "Median genes per cell" = median(filt_seurat_object$nFeature_RNA),
+          "Median isoforms per cell" = median(filt_seurat_object$nFeature_iso),
+          "Median isoform counts per cell" = round(median(filt_seurat_object$nCount_iso), 2),
+          "Max Features" = max.features,
+          "Min Features" = min.features,
+          "Min Counts" = min.counts,
+          "Max Counts" = max.counts,
+          "MT Percentage" = MT,
+          "NPCs" = npc,
+          "Median Percent MT before Filter" = round(median(seurat_object@meta.data[["percent.mt"]]), 2),
+          "Median Percent MT after Filter" = round(median(filt_seurat_object@meta.data[["percent.mt"]]), 2))
+  
+  tbl_sts2 <- tableGrob(stats_sumary)
+  grid.draw(tbl_sts2)
+  
+   FeaturePlot(filt_seurat_object, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"))
+  VlnPlot(filt_seurat_object, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"), group.by = "orig.ident")
+```
 
-print("gene counts per cell")
-summary(filt_seurat_object$nCount_RNA)
+### Adjust filtering params
 
-print("Number of Cells") 
-dim(filt_seurat_object)[2]
+Mike wants to see the effect of modifying the filtering params to see the effect on the summary stats.\
+Here is a quick adjustment of the parms but ideally this should be run through a program that more precisely chooses a threshold. (see Fernando code for this addition - think it works on sce objects)\
+\
+Note: filtering a filtered object here so just be careful that you use the right object for downstream analysis
+
+```{r, echo=TRUE}
+# Filter cells based on feature and count thresholds
+## define the filtering params - (change these based on your data)
+max.features = 8000
+min.features = 2000
+min.counts = 2000
+max.counts = 30000
+MT = 10
+npc = 15
+doublet_rate = 0.08 ### I have no idea what the doublet rate is here will need to chek with chuck will assume 10,000 cells target
+cluster_res = 0.9
+
+
+#now we filter the seurat object based on the QC params listed above 
+filt_seurat_object <- subset(filt_seurat_object, subset = nFeature_RNA > min.features & nFeature_RNA < max.features & percent.mt < MT & nCount_RNA < max.counts & nCount_RNA > min.counts)
+
+  stats_sumary <- rbind("Sample ID" = sample_id,
+          "Cells_before_filter" = dim(seurat_object)[2],
+          "Cells_after_filter" = dim(filt_seurat_object)[2],
+          "Median genes per Cell before filter" = median(seurat_object$nFeature_RNA),
+          "Median gene counts per cell before filter" = median(seurat_object$nCount_RNA),
+          "Median genes per cell" = median(filt_seurat_object$nFeature_RNA),
+          "Median isoforms per cell" = median(filt_seurat_object$nFeature_iso),
+          "Median isoform counts per cell" = round(median(filt_seurat_object$nCount_iso), 2),
+          "Max Features" = max.features,
+          "Min Features" = min.features,
+          "Min Counts" = min.counts,
+          "Max Counts" = max.counts,
+          "MT Percentage" = MT,
+          "NPCs" = npc,
+          "Median Percent MT before Filter" = round(median(seurat_object@meta.data[["percent.mt"]]), 2),
+          "Median Percent MT after Filter" = round(median(filt_seurat_object@meta.data[["percent.mt"]]), 2))
+  
+  tbl_sts2 <- tableGrob(stats_sumary)
+  grid.draw(tbl_sts2)
+  
+  
+  FeaturePlot(filt_seurat_object, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"))
+  VlnPlot(filt_seurat_object, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"), group.by = "orig.ident")
 ```
